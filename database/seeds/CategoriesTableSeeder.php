@@ -2,10 +2,10 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
+use Faker\Generator as Faker;
 use App\Category;
 
-
-class CategoriesTableSeeder extends Seeder
+class CategoriesSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,11 +14,11 @@ class CategoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        $categoriesList = ['Antipasti', 'Primi piatti', 'Secondi piatti', 'Contorni', 'Dolci'];
-        forEach($categoriesList as $category){
+        $categorieslist = ['Primi piatti','Secondi piatti', 'Contorni','Antipasti','Dolci'];
+        forEach($categorieslist as $category){
             $newCategory = new Category();
-            $newCategory-> name = $category;
-            $newCategory-> slug = Str::of($newCategory->name)->slug('-');
+            $newCategory->name = $category;
+            $newCategory->slug = Str::of( $newCategory->name)->slug('-');
 
             $newCategory->save();
         }

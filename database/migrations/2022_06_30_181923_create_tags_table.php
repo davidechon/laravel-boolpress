@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdatePostsTableAddForeignkey extends Migration
+class CreateTagsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class UpdatePostsTableAddForeignkey extends Migration
      */
     public function up()
     {
-        Schema::table('posts', function (Blueprint $table) {
-            //
+        Schema::create('tags', function (Blueprint $table) {
+            $table->id();
+            $table->string('name',100);
+            $table->string('slug',130)->unique();
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class UpdatePostsTableAddForeignkey extends Migration
      */
     public function down()
     {
-        Schema::table('posts', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('tags');
     }
 }

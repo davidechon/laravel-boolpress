@@ -10,7 +10,7 @@
       <h5 class="card-title">{{$post->title}}</h5>
       <p class="card-text">{{$post->content}}</p>
       <p class="card-text">{{$post->category->name}}</p>
-      <p class="card-text">Pubblicato: {{$post->published}}</p>
+      <p class="card-text">Pubblicato: {{$post->published ? 'Published' : 'Unpublished'}}</p>
       <small>{{$post->created_at}}</small>
     </div>
   </div>
