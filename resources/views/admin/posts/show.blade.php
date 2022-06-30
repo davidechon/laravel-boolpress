@@ -1,18 +1,48 @@
 @extends('layouts.admin')
-
+@include('partials/popupdelete')
 @section('content')
-<div class="container">
-  <h1>{{$post->title}}</h1>
-  <div class="card">
-    <img class="card-img-top" src="https://picsum.photos/100/50
-    " alt="Card image cap">
-    <div class="card-body">
-      <h5 class="card-title">{{$post->title}}</h5>
-      <p class="card-text">{{$post->content}}</p>
-      <p class="card-text">{{$post->category->name}}</p>
-      <p class="card-text">Pubblicato: {{$post->published ? 'Published' : 'Unpublished'}}</p>
-      <small>{{$post->created_at}}</small>
-    </div>
-  </div>
-</div>
+    <section class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">{{ $post->title }}</div>
+
+                    <div class="card-body">
+                        @if ($post->category)
+                            <h2>{{ $post->category->name }}</h2>
+                        @endif
+                        <small>{{ $post->created_at }}</small> <span
+                            class="badge {{ $post->published ? 'badge-success' : 'badge-info' }}">
+                            {{ $post->published ? 'Published' : 'Draft' }}</span>
+                        @if ($post->image)
+                            <div class="text-center w-25 mt-3">
+                                <img src="{{ asset('storage/' . $post->image) }}" class="rounded "
+                                    alt="{{ $post->title }}">
+                            </div>
+                        @endif
+
+                        <p>{!! $post->content !!}</p>
+
+                        <h5>Tags</h5>
+                        <ul>
+                            @foreach ($post->tags as $item)
+                                <li>{{ $item->name }}</li>
+                            @endforeach
+                        </ul>
+                        <div class="d-flex align-items-start">
+                            <a href="{{ route('admin.posts.edit', $post->id) }}"
+                                class="btn btn-primary mr-2">Edit</a>
+                            <form action="{{ route('admin.posts.destroy', $post->id) }}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    onclick="boolpress.openModal(event, {{ $post->id }})"
+                                    class="btn btn-warning delete">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 @endsection
