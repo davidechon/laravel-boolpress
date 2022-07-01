@@ -16,7 +16,7 @@
                                 <input type="text" class="form-control" id="name" name="name"
                                     value="{{ old('name', $category->name) }}" placeholder="Insert name">
                             </div>
-                            <button type="submit" class="btn btn-primary">Invia</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
 
                     </div>

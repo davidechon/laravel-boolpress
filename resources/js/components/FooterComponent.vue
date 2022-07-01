@@ -1,6 +1,8 @@
 <template>
     <footer>
-        <h5>Made with &hearts</h5>
+        <div class="container">
+        <h5>Made with &hearts;</h5>
+    </div>
     </footer>
 </template>
 <script>

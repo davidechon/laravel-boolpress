@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Post;
 use App\Category;
 use App\Tag;
+use Illuminate\Support\Facades\Auth;
+
 class PostController extends Controller
 {
     protected $validationRule = [
@@ -16,18 +18,22 @@ class PostController extends Controller
         "content" => "required",
         "published" => "sometimes|accepted",
         "category_id" => "nullable|exists:categories,id",
-        "image" => "nullable|image|mimes:jpeg,bmp,png,svg,gif|max:2048",
+        "image" => "nullable|image|mimes:jpeg,bmp,png,svg|max:2048",
         'tags'=> "nullable|exists:tags,id"
     ];
     /**
-     * Display a listing of the resource.   
+     * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::all();
-        return view('admin.posts.index', compact('posts'));
+        //  $currentUser = Auth::user();
+        //  $posts = Post::where('post_id',$currentUser->id)->paginate(5);
+        //recupero ip dell'utente
+        //$user_ip = $request->ip();
+        $posts =  Post::paginate(5);
+        return view('admin.posts.index',compact('posts'));
     }
 
     /**
@@ -37,6 +43,7 @@ class PostController extends Controller
      */
     public function create()
     {
+        //select * from categories
         $categories = Category::all();
         $tags = Tag::all();
         return view('admin.posts.create', compact('categories','tags'));
@@ -78,10 +85,21 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        $post = Post::findOrFail($id);
-        // dd($post->category);
+
+         //select * from posts where id = '5'
+        //$post = Post::findOrFail($id);
+        // $post = Post::find($id);
+        // if(empty($post)){
+        //     abort(404);
+        // }
+        // $currentUser = Auth::user();
+        //dd($currentUser->id);
+        // if($currentUser->id != $post->user_id && $currentUser->id != 1){
+        //     abort(403);
+        // }
+
         return view('admin.posts.show', compact('post'));
     }
 
@@ -92,6 +110,7 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
+
     {
         $post = Post::findOrFail($id);
         $categories = Category::all();
@@ -101,7 +120,7 @@ class PostController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * 
+     *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -148,13 +167,13 @@ class PostController extends Controller
     {
         $post->tags()->sync([]);
         $post->delete();
-        return redirect()->route('admin.posts.index')->with("message", "Post with id: {$post->id} successfully deleted!");
+        return redirect()->route('admin.posts.index')->with("message","Post with id: {$post->id} successfully deleted !");
     }
-
     /**
-     * Generate  ad unique slug
-     * @param string title
-     * return string
+     * Generate an unique slug
+     *
+     * @param  string $title
+     * @return string
      */
     private function getSlug($title)
     {
